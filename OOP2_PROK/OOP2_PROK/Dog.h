@@ -4,7 +4,7 @@
 class Dog : public Pet
 {
 public:
-	Dog();
+	Dog(string name, int age);
 	~Dog();
 
 	void eat();

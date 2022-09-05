@@ -3,7 +3,7 @@
 
 using namespace std;
 
-Dog::Dog()
+Dog::Dog(string name, int age) : Pet(name, age)
 {
 	
 }
