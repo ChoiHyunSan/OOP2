@@ -2,7 +2,12 @@
 
 using namespace std;
 
-Pet::Pet(string name, int age) : m_age(age), m_name(name)
+Pet::Pet(const string& name = "No name", int age = 0) : m_age(age), m_name(name)
+{
+
+}
+
+Pet::Pet(const Pet& pet) : m_age(pet.m_age), m_name(pet.m_name)
 {
 
 }

@@ -10,6 +10,10 @@ int main()
 
     string DogName = "Happy";
 
+    Dog* dog2(dog);
+
+    dog2->bark();
+
     //dog->setName(DogName);
     //dog->setAge(1);
     dog->bark();

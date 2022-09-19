@@ -7,7 +7,8 @@ using namespace std;
 class Pet
 {
 public:
-	Pet(string, int);
+	Pet(const string&, int);
+	Pet(const Pet& pet);
 	virtual ~Pet();
 
 	virtual void eat();
