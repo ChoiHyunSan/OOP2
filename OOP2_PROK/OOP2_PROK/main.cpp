@@ -1,25 +1,35 @@
 ﻿#include <iostream>
 #include "Pet.h"
 #include "Dog.h"
+#include "GameObject.h"
+#include "Utils.h"
+#include "Screen.h"
 using namespace std;
 
 
 int main()
 {
-    Dog* dog = new Dog("Happy", 1);
 
-    string DogName = "Happy";
+    // init player
+    GameObject player('X', 3, 3);
+    //GameObject monster('Y', 10, 10);
 
-    Dog* dog2(dog);
+    // init screen
+    Screen screen(30, 81);
 
-    dog2->bark();
+    while(1)
+    {
+        char key;
 
-    //dog->setName(DogName);
-    //dog->setAge(1);
-    dog->bark();
+        screen.clear();
 
-   
-    delete dog;
+        screen.draw(player.GetPos(), player.GetShape());
+        //screen.draw(monster.GetPos(), monster.GetShape());
+
+        screen.render();
+        
+        player.processInput();
+    }
 
     return 0;
 }

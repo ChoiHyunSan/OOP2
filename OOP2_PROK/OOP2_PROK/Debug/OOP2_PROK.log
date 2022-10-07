@@ -1,2 +1,3 @@
-﻿  Pet.cpp
-  OOP2_PROK.vcxproj -> C:\Users\apf_temp_admin\Documents\GitHub\OOP2\OOP2_PROK\Debug\OOP2_PROK.exe
+﻿  main.cpp
+C:\Users\apf_temp_admin\Documents\GitHub\OOP2_PROK\OOP2_PROK\main.cpp(22,14): warning C4101: 'key' :참조되지 않은 지역 변수입니다.
+  OOP2_PROK.vcxproj -> C:\Users\apf_temp_admin\Documents\GitHub\OOP2_PROK\Debug\OOP2_PROK.exe

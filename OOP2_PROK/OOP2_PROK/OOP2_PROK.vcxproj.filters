@@ -20,12 +20,30 @@
     <ClCompile Include="Dog.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Screen.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dog.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
     <ClInclude Include="Pet.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="define.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Screen.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
   </ItemGroup>
