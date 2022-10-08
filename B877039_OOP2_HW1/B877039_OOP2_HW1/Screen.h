@@ -2,16 +2,20 @@
 class Screen
 {
 private:
-	  
+	// Screen Scale
+	int m_nCols;
+	int m_nRows;
+
+	char* m_map;
 
 public:
-	void update();
+	void render(const char* map);
 
 private:
-	void render();
+
 
 public:
-	Screen();
+	Screen(int Rows, int Cols);
 	~Screen();
 };
 
