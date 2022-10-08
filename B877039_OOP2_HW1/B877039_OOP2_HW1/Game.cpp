@@ -23,13 +23,13 @@ Game::~Game()
 		delete m_screen;
 
 	if (m_mineMap != nullptr)
-		delete m_mineMap;
+		delete[] m_mineMap;
 
 	if (m_windowMap != nullptr)
-		delete m_windowMap;
+		delete[] m_windowMap;
 
 	if (m_randMineIndex != nullptr)
-		delete m_randMineIndex;
+		delete[] m_randMineIndex;
 }
 
 void Game::init()
@@ -71,27 +71,32 @@ void Game::play()
 	}
 }
 
+// 랜덤하게 지뢰를 세팅을 하는 함수에 대한 수정이 필요함
 void Game::setMine(char* mineMap, const int size)
 {
-	for (int i = 0; i < m_mineNum; ++i)
+	int count = 0;
+	while (count < m_mineNum)
 	{
-		m_randMineIndex[i] = (rand() % size-1);
-		if (m_mineMap[m_randMineIndex[i]] == '\n')
+		m_randMineIndex[count] = rand() % (size-1);
+
+		for (int i = 0; i < count; i++)
 		{
-			i--;
+			if (m_randMineIndex[count] == m_randMineIndex[i])
+			{
+				count--;
+				break;
+			}
+		}	
+		if (m_randMineIndex[count] % m_nCols == m_nRows)
+		{
 			continue;
 		}
-		for (int j = 0; j < i; j++)
-			if (m_randMineIndex[i] == m_randMineIndex[j])
-				i--;
-
+		count++;
 	}
-	
 	for (int i = 0; i < m_mineNum; ++i)
 	{
 		m_mineMap[m_randMineIndex[i]] = 'X';
 	}
-	
 }
 
 void Game::initMap()
@@ -105,7 +110,7 @@ void Game::initMap()
 	m_windowMap[m_nCols * m_nRows - 1] = '\0';
 
 	// init Mine Index
-	m_randMineIndex = new char[m_mineNum-1];
+	m_randMineIndex = new char[m_mineNum];
 
 	// Set mineMap
 	memset(m_mineMap, '0', m_nCols * m_nRows - 1);

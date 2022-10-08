@@ -10,7 +10,7 @@ void Screen::render(const char* map)
 	m_map = new char[m_nCols * m_nRows];
 	strcpy(m_map, map);
 
-	cout << m_map;
+	printf("%s", m_map);
 }
 
 
