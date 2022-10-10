@@ -5,6 +5,13 @@ class Screen;
 #define COLS 11
 #define ROWS 10
 
+enum class GAME_STATE
+{
+	TITLE = 0,
+	PLAY,
+	GAME_OVER,
+	GAME_CLEAR
+};
 
 class Game
 {
@@ -31,14 +38,15 @@ public:
 
 private:
 	void init();
-	void render();
+	void render(GAME_STATE state);
 	void update();
 	void input();
 
 private:
 	void setMine(char* m_mineMap, const int size);
 	void initMap();
-
+	void searchMine(int x, int y);
+	void markingMine(int x, int y);
 
 public:
 	void play();

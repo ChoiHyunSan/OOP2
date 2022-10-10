@@ -2,7 +2,9 @@
 #include "Screen.h"
 #include <vector>
 #include "Utils.h"
+#include <iostream>
 
+using namespace std;
 using std::vector;
 
 Game::Game()
@@ -46,28 +48,48 @@ void Game::init()
 
 }
 
-void Game::render()
+void Game::render(GAME_STATE state)
 {
-	m_screen->render(m_mineMap);
+	m_screen->render(m_windowMap);
 }
 
 void Game::update()
 {
-	
+	render(GAME_STATE::PLAY);
+	input();
 }
 
 void Game::input()
 {
+	int x(0), y(0);
+	char type(0);
 
+	while (1)
+	{
+		Borland::GotoXY(0, 15);
+		cout << "X Y TYPE(C : 선택 , M : 마킹) : ";
+		cin >> type;
+
+		switch (type)
+		{
+		case 'C':
+			searchMine(x, y);
+			return;
+
+		case 'M':
+			markingMine(x,y);
+			return;
+		default:
+			return;
+		}
+	}
 }
 
 void Game::play()
 {
-	//while (1)
+	while (1)
 	{
-		input();
 		update();
-		render();
 	}
 }
 
@@ -122,4 +144,21 @@ void Game::initMap()
 	memset(m_windowMap, '0', m_nCols * m_nRows - 1);
 	for (int i = 0; i < m_nRows - 1; ++i)
 		m_windowMap[i * m_nCols + m_nRows] = '\n';
+}
+
+void Game::searchMine(int x, int y)
+{
+	// 해당 좌표가 지뢰인지 확인한다.
+	// 1. 지뢰인 경우 : 게임 오버
+	// 2. 지뢰가 이닌 경우 8방향에 대한 지뢰 탐색
+	// 2-1 8방향에 지뢰가 1개 이상인 경우 : 해당 좌표에 지뢰의 개수만큼 표시
+	// 2-2 8방향에 지뢰가 0개인 경우 : 8방향에 대한 지뢰 탐색 함수를 재귀
+
+
+
+}
+
+void Game::markingMine(int x, int y)
+{
+	// 마킹하려는 좌표가 지뢰가 아니라면 화면의 해당 좌표를 M으로 표시해준다.
 }
