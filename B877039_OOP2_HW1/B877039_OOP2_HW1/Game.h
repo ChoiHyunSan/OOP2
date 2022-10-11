@@ -2,7 +2,7 @@
 
 class Screen;
 
-#define COLS 11
+#define COLS 10
 #define ROWS 10
 
 enum class GAME_STATE
@@ -43,7 +43,7 @@ private:
 	void input();
 
 private:
-	void setMine(char* m_mineMap, const int size);
+	void setMine();
 	void initMap();
 	void searchMine(int x, int y);
 	void markingMine(int x, int y);

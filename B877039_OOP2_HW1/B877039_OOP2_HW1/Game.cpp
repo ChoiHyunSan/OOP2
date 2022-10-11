@@ -50,7 +50,7 @@ void Game::init()
 
 void Game::render(GAME_STATE state)
 {
-	m_screen->render(m_windowMap);
+	m_screen->render(m_mineMap);
 }
 
 void Game::update()
@@ -94,12 +94,12 @@ void Game::play()
 }
 
 // 랜덤하게 지뢰를 세팅을 하는 함수에 대한 수정이 필요함
-void Game::setMine(char* mineMap, const int size)
+void Game::setMine()
 {
 	int count = 0;
 	while (count < m_mineNum)
 	{
-		m_randMineIndex[count] = rand() % (size-1);
+		m_randMineIndex[count] = rand() % (m_nCols * m_nRows - 1);
 
 		for (int i = 0; i < count; i++)
 		{
@@ -109,41 +109,35 @@ void Game::setMine(char* mineMap, const int size)
 				break;
 			}
 		}	
-		if (m_randMineIndex[count] % m_nCols == m_nRows)
-		{
-			continue;
-		}
 		count++;
 	}
 	for (int i = 0; i < m_mineNum; ++i)
 	{
 		m_mineMap[m_randMineIndex[i]] = 'X';
 	}
+
 }
 
 void Game::initMap()
 {
 	// Init Map
-	m_mineMap = new char[m_nCols * m_nRows];
-	m_windowMap = new char[m_nCols * m_nRows];
+	m_mineMap = new char[m_nCols * m_nRows + 1];
+	m_windowMap = new char[m_nCols * m_nRows + 1];
 
 	// Set NULL Char
-	m_mineMap[m_nCols * m_nRows - 1] = '\0';
-	m_windowMap[m_nCols * m_nRows - 1] = '\0';
+	m_mineMap[m_nCols * m_nRows] = '\0';
+	m_windowMap[m_nCols * m_nRows] = '\0';
 
 	// init Mine Index
 	m_randMineIndex = new char[m_mineNum];
 
 	// Set mineMap
-	memset(m_mineMap, '0', m_nCols * m_nRows - 1);
-	for (int i = 0; i < m_nRows - 1; ++i)
-		m_mineMap[i * m_nCols + m_nRows] = '\n';
-	setMine(m_mineMap, m_nCols * m_nRows);
+	memset(m_mineMap, '0', m_nCols * m_nRows);
+	setMine();
 
 	// Set windowMap
-	memset(m_windowMap, '0', m_nCols * m_nRows - 1);
-	for (int i = 0; i < m_nRows - 1; ++i)
-		m_windowMap[i * m_nCols + m_nRows] = '\n';
+	memset(m_windowMap, '0', m_nCols * m_nRows);
+
 }
 
 void Game::searchMine(int x, int y)
