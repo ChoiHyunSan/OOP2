@@ -50,7 +50,7 @@ void Game::init()
 
 void Game::render(GAME_STATE state)
 {
-	m_screen->render(m_mineMap);
+	m_screen->render(m_windowMap);
 }
 
 void Game::update()
@@ -64,25 +64,25 @@ void Game::input()
 	int x(0), y(0);
 	char type(0);
 
-	while (1)
-	{
-		Borland::GotoXY(0, 15);
-		cout << "X Y TYPE(C : 선택 , M : 마킹) : ";
-		cin >> type;
+	searchMine(3, 5);
+	Borland::GotoXY(0, 16);
+	cout << "hello" << endl;
+	//while (1)
+	//{
+	//	Borland::GotoXY(0, 15);
+	//	cout << "X Y TYPE(C : 선택 , M : 마킹) : ";
+	//	switch (type)
+	//	{
+	//	case 'C':
+	//		return;
 
-		switch (type)
-		{
-		case 'C':
-			searchMine(x, y);
-			return;
-
-		case 'M':
-			markingMine(x,y);
-			return;
-		default:
-			return;
-		}
-	}
+	//	case 'M':
+	//		markingMine(x,y);
+	//		return;
+	//	default:
+	//		return;
+	//	}
+	//}
 }
 
 void Game::play()
@@ -113,7 +113,7 @@ void Game::setMine()
 	}
 	for (int i = 0; i < m_mineNum; ++i)
 	{
-		m_mineMap[m_randMineIndex[i]] = 'X';
+		m_mineMap[m_randMineIndex[i]] = MINE;
 	}
 
 }
@@ -132,27 +132,75 @@ void Game::initMap()
 	m_randMineIndex = new char[m_mineNum];
 
 	// Set mineMap
-	memset(m_mineMap, '0', m_nCols * m_nRows);
+	memset(m_mineMap, MAP, m_nCols * m_nRows);
 	setMine();
 
 	// Set windowMap
-	memset(m_windowMap, '0', m_nCols * m_nRows);
+	memset(m_windowMap, MAP, m_nCols * m_nRows);
 
 }
 
-void Game::searchMine(int x, int y)
+void Game::searchMine(const int x, const int y)
 {
+	int selectIndex = 10 * y + x - 1;
 	// 해당 좌표가 지뢰인지 확인한다.
 	// 1. 지뢰인 경우 : 게임 오버
 	// 2. 지뢰가 이닌 경우 8방향에 대한 지뢰 탐색
 	// 2-1 8방향에 지뢰가 1개 이상인 경우 : 해당 좌표에 지뢰의 개수만큼 표시
-	// 2-2 8방향에 지뢰가 0개인 경우 : 8방향에 대한 지뢰 탐색 함수를 재귀
+	// 2-2 8방향에 지뢰가 없는 좌표가 있는 경우 :  8방향에 대한 지뢰 탐색 함수를 재귀
 
+	// 지뢰찾기의 크기보다 큰 값이 들어올 경우 무시
+	if (x < 1 || y < 1 || x > m_nCols || y > m_nRows) return;
 
+	// 1. 지뢰인 경우 : 게임 오버
+	if (m_mineMap[selectIndex] == MINE) { gameOver(); return; }
 
+	researchMine(x, y, 0);
+}
+
+void Game::researchMine(const int x, const int y, int vec)
+{
+	int selectIndex = 10 * y + x - 1 + vec;
+
+	// 지뢰찾기의 범위 값이 들어올 경우 무시
+	if (x < 1 || y < 1 || x > m_nCols || y > m_nRows) return;
+
+	// 2. 지뢰가 이닌 경우 8방향에 대한 지뢰 탐색
+	int a[] = { (-m_nCols - 1) , (-m_nCols), (1 - m_nCols), -1, 1, (m_nCols - 1),m_nCols, (m_nCols + 1) };
+	int count = 0;
+	for (int i = 0; i < 8; i++)
+	{
+		int index = selectIndex + a[i];
+		if(index >= 0)
+			if (m_mineMap[index] == MINE) count++;
+			else if(m_mineMap[index] == MAP){}
+	}
+
+	// 2-1 8방향에 지뢰가 1개 이상인 경우 : 해당 좌표에 지뢰의 개수만큼 표시
+	m_windowMap[selectIndex] = static_cast<char>(count + 48);
+
+	// 2-2 8방향에 지뢰가 없는 좌표가 있는 경우 : 해당 좌표에 대한 8방향 지뢰 탐색 함수를 재귀
+	//int index = selectIndex + a[i];
+	//if (index >= 0)
+	//if (m_mineMap[selectIndex] == MAP)
+	//{
+	//	researchMine(x - 1, y - 1, 0);
+	//	researchMine(x - 0, y - 1, 0);
+	//	researchMine(x + 1, y - 1, 0);
+	//	researchMine(x - 1, y + 0, 0);
+	//	researchMine(x + 1, y + 0, 0);
+	//	researchMine(x - 1, y + 1, 0);
+	//	researchMine(x + 0, y + 1, 0);
+	//	researchMine(x + 1, y + 1, 0);
+	//}
 }
 
 void Game::markingMine(int x, int y)
 {
 	// 마킹하려는 좌표가 지뢰가 아니라면 화면의 해당 좌표를 M으로 표시해준다.
+}
+
+void Game::gameOver()
+{
+	cout << "Game Over!" << endl;
 }

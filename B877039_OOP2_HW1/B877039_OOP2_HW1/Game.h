@@ -1,9 +1,17 @@
 #pragma once
-
+#pragma warning(disable : 4996)
 class Screen;
 
 #define COLS 10
 #define ROWS 10
+#define MINE 'X'
+#define MAP 'Q'
+
+// 할거
+// 1. 재귀적인 지뢰없는 맵 찾기
+// 2. 입력값 받기
+// 3. 게임 외관꾸미기
+// 4. 게임오버 상태 만들기
 
 enum class GAME_STATE
 {
@@ -47,6 +55,10 @@ private:
 	void initMap();
 	void searchMine(int x, int y);
 	void markingMine(int x, int y);
+
+	void researchMine(int x, int y, int vec);
+private:
+	void gameOver();
 
 public:
 	void play();
