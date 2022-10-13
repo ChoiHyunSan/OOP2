@@ -10,23 +10,36 @@ using namespace std;
 void Screen::render(const char* map)
 {
 	m_map = new char[m_nCols * m_nRows+1];
+	
 	strcpy(m_map, map);
 
 	Borland::GotoXY(0, 0);
-	cout << "   ";
+	cout << " ";
+	for (int i = 0; i < m_nCols + 2; i++) cout << "คั";
+	cout << endl 
+	
+	cout << "|   ";
 	for (int i = 0; i < m_nCols; i++)
-		cout << i + 1 << " ";
+		cout << i  << " ";
+	cout << "|" << endl;
 
-	cout << endl;
 	for (int i = 0; i < m_nCols; ++i)
 	{
-		cout << setw(2) << setfill('0') << i + 1<< " ";
+		cout << "| "<< i << " ";
 		for (int j = 0; j < m_nRows; ++j)
 		{
 			cout << m_map[i * m_nCols + j] << " ";
 		}
-		cout << endl;
+		cout << "|" << endl;
 	}
+
+	cout << " ";
+	for (int i = 0; i < m_nCols + 2; i++) cout << "คั";
+	cout << endl;
+}
+
+void Screen::setState(GAME_STATE state)
+{
 }
 
 

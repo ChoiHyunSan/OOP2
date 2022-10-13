@@ -13,7 +13,7 @@ Game::Game()
 	m_nCols(COLS),
 	m_nRows(ROWS),
 	m_screen(nullptr),
-	m_mineNum(5),
+	m_mineNum(15),
 	m_randMineIndex(nullptr)
 {
 	init();
@@ -37,6 +37,7 @@ Game::~Game()
 void Game::init()
 {
 
+
 	// Create Screen
 	m_screen = new Screen(m_nRows, m_nCols);
 
@@ -50,6 +51,7 @@ void Game::init()
 
 void Game::render(GAME_STATE state)
 {
+
 	m_screen->render(m_windowMap);
 }
 
@@ -64,25 +66,18 @@ void Game::input()
 	int x(0), y(0);
 	char type(0);
 
-	searchMine(0,0);
 	Borland::GotoXY(0, 16);
-	//cout << "hello" << endl;
-	//while (1)
-	//{
-	//	Borland::GotoXY(0, 15);
-	//	cout << "X Y TYPE(C : 선택 , M : 마킹) : ";
-	//	switch (type)
-	//	{
-	//	case 'C':
-	//		return;
+	cout << "input x : ";
+	cin >> x;
 
-	//	case 'M':
-	//		markingMine(x,y);
-	//		return;
-	//	default:
-	//		return;
-	//	}
-	//}
+	Borland::GotoXY(0, 16);
+	cout << "your input x : " << x << endl;
+	cout << "input y : ";
+	cin >> y;
+
+	search(x, y);
+
+
 }
 
 void Game::play()
@@ -93,7 +88,6 @@ void Game::play()
 	}
 }
 
-// 랜덤하게 지뢰를 세팅을 하는 함수에 대한 수정이 필요함
 void Game::setMine()
 {
 	int count = 0;
@@ -140,25 +134,50 @@ void Game::initMap()
 
 }
 
-void Game::searchMine(const int x, const int y)
+void Game::search(int x, int y)
 {
 	int selectIndex = 10 * y + x;
-	// 해당 좌표가 지뢰인지 확인한다.
-	// 1. 지뢰인 경우 : 게임 오버
-	// 2. 지뢰가 이닌 경우 8방향에 대한 지뢰 탐색
-	// 2-1 8방향에 지뢰가 1개 이상인 경우 : 해당 좌표에 지뢰의 개수만큼 표시
-	// 2-2 8방향에 지뢰가 없는 좌표가 있는 경우 :  8방향에 대한 지뢰 탐색 함수를 재귀
 
 	// 지뢰찾기의 크기보다 큰 값이 들어올 경우 무시
 	if (x < 0 || y < 0 || x > m_nCols || y > m_nRows) return;
 
-	// 1. 지뢰인 경우 : 게임 오버
 	if (m_mineMap[selectIndex] == MINE) { gameOver(); return; }
 
-	researchMine(x, y, 0);
+	searchMine(x, y, 0);
 }
 
-void Game::researchMine(const int x, const int y, int vec)
+int Game::countMine(int selectIndex)
+{
+	// 2. 지뢰가 이닌 경우 위치에 따라 연결된 방향에 대한 지뢰 탐색
+	vector<int> dirs;
+
+	// 좌표의 위치에 따라 검색할 방향 벡터 컨테이너를 결정
+	if (selectIndex % m_nCols == 0)
+		dirs = dirLeft;
+	else if (selectIndex % m_nCols == m_nCols - 1)
+		dirs = dirRight;
+	else
+		dirs = dirDefault;
+
+	int count = 0;
+	for (auto dir : dirs)
+	{
+		int index = selectIndex + dir;
+
+		if (index >= 0)
+		{
+			// 지뢰가 설치된 경우 count를 증가
+			if (m_mineMap[index] == MINE)
+			{
+				count++;
+			}
+		}
+	}
+
+	return count;
+}
+
+void Game::searchMine(const int x, const int y, int vec)
 {
 	int selectIndex = 10 * y + x  + vec;
 
@@ -166,9 +185,6 @@ void Game::researchMine(const int x, const int y, int vec)
 	if (x < 0 || y < 0 || x > m_nCols || y > m_nRows) return;
 
 	// 2. 지뢰가 이닌 경우 위치에 따라 연결된 방향에 대한 지뢰 탐색
-	vector<int> dirDefault = { (-m_nCols - 1) , (-m_nCols), (1 - m_nCols), -1, 1, (m_nCols - 1),m_nCols, (m_nCols + 1) };
-	vector<int> dirRight = { (-m_nCols - 1) , (-m_nCols), - 1, (m_nCols - 1), m_nCols };
-	vector<int> dirLeft = {  (-m_nCols), (1 - m_nCols),  1, m_nCols, (m_nCols + 1) };
 
 	vector<int> vIndex;
 	vector<int> dirs;
@@ -193,9 +209,13 @@ void Game::researchMine(const int x, const int y, int vec)
 			{
 				count++;
 			}
-			else if (m_windowMap[index] == MAP)
+			// 지뢰가 아닌경우
+			else 
 			{
-				vIndex.push_back(index);
+				if (m_windowMap[index] == MAP)
+				{
+					vIndex.push_back(index);
+				}
 			}
 		}
 	}
@@ -206,7 +226,12 @@ void Game::researchMine(const int x, const int y, int vec)
 	// 2-2 8방향에 지뢰가 없는 좌표가 있는 경우 : 해당 좌표에 대한 8방향 지뢰 탐색 함수를 재귀
 	for (auto index : vIndex)
 	{
-		researchMine(index % 10, index / 10, 0);
+		// 지뢰가 아닌 좌표중 인접지뢰가 0인 좌표에 대해서만 재귀함수 호출
+		if (countMine(index) == 0)
+			searchMine(index % 10, index / 10, 0);
+		// 그 외에는 인접지뢰의 개수를 나타낸다.
+		else
+			m_windowMap[index] = (char)(countMine(index) + 48);
 	}
 
 	return;
