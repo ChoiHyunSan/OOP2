@@ -37,12 +37,17 @@ Game::~Game()
 void Game::init()
 {
 
-
 	// Create Screen
 	m_screen = new Screen(m_nRows, m_nCols);
 
 	// Init borland
 	Borland::Initialize();
+
+	Borland::GotoXY(27, 2);
+	cout << "Q : ºóÄ­";
+
+	Borland::GotoXY(27, 3);
+	cout << "X : Áö·Ú";
 
 	// Init Map
 	initMap();
@@ -66,18 +71,27 @@ void Game::input()
 	int x(0), y(0);
 	char type(0);
 
-	Borland::GotoXY(0, 16);
+	Borland::GotoXY(8, 2);
+	cout << "MINE GAME";
+
+	Borland::GotoXY(2, 4);
 	cout << "input x : ";
+	Borland::GotoXY(2, 5);
+	cout << "input y : ";
 	cin >> x;
 
-	Borland::GotoXY(0, 16);
-	cout << "your input x : " << x << endl;
+	Borland::GotoXY(2, 4);
+	cout << "input x : " << x << endl;
+	Borland::GotoXY(2, 5);
 	cout << "input y : ";
 	cin >> y;
 
 	search(x, y);
 
-
+	Borland::GotoXY(27, 6);
+	cout << "Prev x : " << x;
+	Borland::GotoXY(27, 7);
+	cout << "Prev y : " << y;
 }
 
 void Game::play()

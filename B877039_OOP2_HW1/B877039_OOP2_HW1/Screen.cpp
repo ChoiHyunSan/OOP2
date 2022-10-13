@@ -14,9 +14,24 @@ void Screen::render(const char* map)
 	strcpy(m_map, map);
 
 	Borland::GotoXY(0, 0);
+	
+	////////////////////////////////////////
+	// ¼³Á¤Ã¢
 	cout << " ";
 	for (int i = 0; i < m_nCols + 2; i++) cout << "¤Ñ";
-	cout << endl 
+	cout << endl;
+
+	for (int j = 0; j < 5; j++)
+	{
+		cout << "|";
+		for (int i = 0; i < m_nCols * 2 + 2; i++) cout << " ";
+		cout << " |" << endl;
+	}
+	////////////////////////////////////////
+
+	cout << " ";
+	for (int i = 0; i < m_nCols + 2; i++) cout << "¤Ñ";
+	cout << endl;
 	
 	cout << "|   ";
 	for (int i = 0; i < m_nCols; i++)

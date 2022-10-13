@@ -16,6 +16,7 @@ class Screen;
 // 2. 입력값 받기
 // 3. 게임 외관꾸미기
 // 4. 게임오버 상태 만들기
+// 5. 승리 조건 추가, 클리어 화면 추가
 
 enum class GAME_STATE
 {
@@ -64,6 +65,7 @@ private:
 	void markingMine(int x, int y);
 	void search(int x, int y);
 	void searchMine(int x, int y, int vec);
+
 private:
 	void gameOver();
 
