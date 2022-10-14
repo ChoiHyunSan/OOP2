@@ -43,7 +43,9 @@ private:
 	int		m_mineNum;
 	char*	m_randMineIndex;
 
-	int m_score;	  // °ÔÀÓ ½ºÄÚ¾î : Áö·Ú¸¦ ¹âÁö ¾Ê°í ³ÐÈù ¶¥ÀÇ Å©±â
+	bool    m_isGameOver;
+
+	int		m_score;	  // °ÔÀÓ ½ºÄÚ¾î : Áö·Ú¸¦ ¹âÁö ¾Ê°í ³ÐÈù ¶¥ÀÇ Å©±â
 private:
 	vector<int> dirDefault = { (-m_nCols - 1) , (-m_nCols), (1 - m_nCols), -1, 1, (m_nCols - 1),m_nCols, (m_nCols + 1) };
 	vector<int> dirRight = { (-m_nCols - 1) , (-m_nCols), -1, (m_nCols - 1), m_nCols };
@@ -65,6 +67,8 @@ private:
 	void markingMine(int x, int y);
 	void search(int x, int y);
 	void searchMine(int x, int y, int vec);
+
+	GAME_STATE checkGameState();
 
 private:
 	void gameOver();
