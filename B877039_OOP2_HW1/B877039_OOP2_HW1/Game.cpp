@@ -3,7 +3,7 @@
 #include <vector>
 #include "Utils.h"
 #include <iostream>
-
+#include <conio.h>
 using namespace std;
 using std::vector;
 
@@ -66,6 +66,7 @@ void Game::update()
 	input();
 }
 
+// use getch 
 void Game::input()
 {
 	int x(0), y(0);
@@ -78,20 +79,21 @@ void Game::input()
 	cout << "input x : ";
 	Borland::GotoXY(2, 5);
 	cout << "input y : ";
-	cin >> x;
+
+	x = _getch();
 
 	Borland::GotoXY(2, 4);
-	cout << "input x : " << x << endl;
+	cout << "input x : " << x -48 << endl;
 	Borland::GotoXY(2, 5);
 	cout << "input y : ";
-	cin >> y;
+	y = _getch();
 
-	search(x, y);
+	search(x - 48, y - 48);
 
 	Borland::GotoXY(27, 6);
-	cout << "Prev x : " << x;
+	cout << "Prev x : " << x-48;
 	Borland::GotoXY(27, 7);
-	cout << "Prev y : " << y;
+	cout << "Prev y : " << y-48;
 }
 
 void Game::play()

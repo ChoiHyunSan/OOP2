@@ -17,6 +17,7 @@ void Screen::render(const char* map)
 	
 	////////////////////////////////////////
 	// ¼³Á¤Ã¢
+
 	cout << " ";
 	for (int i = 0; i < m_nCols + 2; i++) cout << "¤Ñ";
 	cout << endl;
@@ -27,6 +28,7 @@ void Screen::render(const char* map)
 		for (int i = 0; i < m_nCols * 2 + 2; i++) cout << " ";
 		cout << " |" << endl;
 	}
+
 	////////////////////////////////////////
 
 	cout << " ";
