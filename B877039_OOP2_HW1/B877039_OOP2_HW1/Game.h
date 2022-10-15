@@ -9,7 +9,7 @@ class Screen;
 #define ROWS 10
 #define MINE 'X'
 #define MAP 'Q'
-#define MINENUM 5
+#define MINENUM 15
 
 // 할거
 // 1. 재귀적인 지뢰없는 맵 찾기
@@ -67,6 +67,7 @@ private:
 	void markingMine(int x, int y);
 	void search(int x, int y);
 	void searchMine(int x, int y, int vec);
+	bool isSearchAllMine();
 
 	GAME_STATE checkGameState();
 

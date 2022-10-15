@@ -13,7 +13,7 @@ Game::Game()
 	m_nCols(COLS),
 	m_nRows(ROWS),
 	m_screen(nullptr),
-	m_mineNum(15),
+	m_mineNum(MINENUM),
 	m_randMineIndex(nullptr),
 	m_isGameOver(false)
 {
@@ -57,27 +57,44 @@ void Game::init()
 
 void Game::render(GAME_STATE state)
 {
+	if (state == GAME_STATE::GAME_CLEAR)
+	{
+		memset(m_windowMap, '~', m_nCols * m_nRows);
+		Borland::GotoXY(27, 10);
+		cout << "  天天天天天天天" << endl;
+		Borland::GotoXY(27, 11);
+		cout << " |  Game Clear  |" << endl;
+		Borland::GotoXY(27, 12);
+		cout << "  天天天天天天天" << endl;
+	}
+	else if (state == GAME_STATE::GAME_OVER)
+	{
+		memset(m_windowMap, '~', m_nCols * m_nRows);
+		Borland::GotoXY(27, 10);
+		cout << "  天天天天天天天" << endl;
+		Borland::GotoXY(27, 11);
+		cout << " |  Game Over  |" << endl;
+		Borland::GotoXY(27, 12);
+		cout << "  天天天天天天天" << endl;
+	}
 
-	if(state == GAME_STATE::PLAY)
-		m_screen->render(m_windowMap);
+	m_screen->render(m_windowMap);
 	
 }
 
 GAME_STATE Game::checkGameState()
 {
-	int count = 0;
-	
-	if (m_isGameOver)
-		return GAME_STATE::GAME_OVER;
+	if (isSearchAllMine()) { return GAME_STATE::GAME_CLEAR; }
 
-	else
-		return GAME_STATE::PLAY;
+	else if (m_isGameOver) { return GAME_STATE::GAME_OVER; }
+
+	else { return GAME_STATE::PLAY; }
 }
 
 void Game::update()
 {
 
-	render(GAME_STATE::PLAY);
+	render(checkGameState());
 	input();
 }
 
@@ -91,28 +108,35 @@ void Game::input()
 	cout << "MINE GAME";
 
 	Borland::GotoXY(2, 4);
-	cout << "input x : ";
-	Borland::GotoXY(2, 5);
-	cout << "input y : ";
+	cout << "               " << endl;
+	cout << "               ";
+	if (checkGameState() == GAME_STATE::PLAY)
+	{
 
-	x = _getch();
+		Borland::GotoXY(2, 4);
+		cout << "input x : ";
+		Borland::GotoXY(2, 5);
+		cout << "input y : ";
 
-	Borland::GotoXY(2, 4);
-	cout << "input x : " << x -48 << endl;
-	Borland::GotoXY(2, 5);
-	cout << "input y : ";
-	y = _getch();
+		x = _getch();
 
-	search(x - 48, y - 48);
+		Borland::GotoXY(2, 4);
+		cout << "input x : " << x - 48 << endl;
+		Borland::GotoXY(2, 5);
+		cout << "input y : ";
+		y = _getch();
 
-	Borland::GotoXY(27, 6);
-	cout << "                                     ";
-	Borland::GotoXY(27, 6);
-	cout << "Prev x : " << x-48;
-	Borland::GotoXY(27, 7);
-	cout << "                                     ";
-	Borland::GotoXY(27, 7);
-	cout << "Prev y : " << y-48;
+		search(x - 48, y - 48);
+
+		Borland::GotoXY(27, 6);
+		cout << "                                     ";
+		Borland::GotoXY(27, 6);
+		cout << "Prev x : " << x - 48;
+		Borland::GotoXY(27, 7);
+		cout << "                                     ";
+		Borland::GotoXY(27, 7);
+		cout << "Prev y : " << y - 48;
+	}
 }
 
 void Game::play()
@@ -272,6 +296,20 @@ void Game::searchMine(const int x, const int y, int vec)
 
 	return;
 
+}
+
+bool Game::isSearchAllMine()
+{
+	int count = 0;
+	for (int i = 0; i < m_nCols * m_nRows; i++)
+	{
+		if (m_windowMap[i] == MAP)
+			count++;
+	}
+	if (count == m_mineNum)
+		return true;
+
+	return false;
 }
 
 void Game::markingMine(int x, int y)
