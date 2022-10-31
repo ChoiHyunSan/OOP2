@@ -25,8 +25,19 @@ void Screen::render(const char* map)
 	for (int j = 0; j < 5; j++)
 	{
 		cout << "|";
-		for (int i = 0; i < m_nCols * 2 + 2; i++) cout << " ";
-		cout << " |" << endl;
+		if (j == 2)
+		{
+
+			cout << "       MINE GAME       |" << endl;
+		}
+		else
+		{
+			for (int i = 0; i < m_nCols * 2 + 2; i++)
+			{
+				cout << " ";
+			}
+			cout << " |" << endl;
+		}
 	}
 
 	////////////////////////////////////////
@@ -53,6 +64,7 @@ void Screen::render(const char* map)
 	cout << " ";
 	for (int i = 0; i < m_nCols + 2; i++) cout << "คั";
 	cout << endl;
+
 }
 
 void Screen::setState(GAME_STATE state)

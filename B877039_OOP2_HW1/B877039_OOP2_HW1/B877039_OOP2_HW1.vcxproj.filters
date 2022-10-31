@@ -20,6 +20,9 @@
     <ClCompile Include="Screen.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="input.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -29,6 +32,9 @@
       <Filter>소스 파일</Filter>
     </ClInclude>
     <ClInclude Include="Utils.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="input.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
   </ItemGroup>

@@ -2,7 +2,7 @@
 #pragma warning(disable : 4996)
 #include <vector>
 using std::vector;
-
+#include "input.h"
 class Screen;
 
 #define COLS 10
@@ -30,7 +30,8 @@ class Game
 {
 private:
 	Screen* m_screen; // 
-	
+	Input	m_input;
+
 	// Screen Scale
 	int		m_nCols;
 	int		m_nRows;
@@ -43,9 +44,13 @@ private:
 	int		m_mineNum;
 	char*	m_randMineIndex;
 
+	int		m_keyInputX = -1;
+	int		m_keyInputY = -1;
+
 	bool    m_isGameOver;
 
 	int		m_score;	  // °ÔÀÓ ½ºÄÚ¾î : Áö·Ú¸¦ ¹âÁö ¾Ê°í ³ÐÈù ¶¥ÀÇ Å©±â
+
 private:
 	vector<int> dirDefault = { (-m_nCols - 1) , (-m_nCols), (1 - m_nCols), -1, 1, (m_nCols - 1),m_nCols, (m_nCols + 1) };
 	vector<int> dirRight = { (-m_nCols - 1) , (-m_nCols), -1, (m_nCols - 1), m_nCols };
@@ -63,10 +68,14 @@ private:
 private:
 	void setMine();
 	void initMap();
+
 	int countMine(int selectIndex);
+
 	void markingMine(int x, int y);
+
 	void search(int x, int y);
 	void searchMine(int x, int y, int vec);
+
 	bool isSearchAllMine();
 
 	GAME_STATE checkGameState();

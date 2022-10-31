@@ -57,6 +57,7 @@ void Game::init()
 
 void Game::render(GAME_STATE state)
 {
+
 	if (state == GAME_STATE::GAME_CLEAR)
 	{
 		memset(m_windowMap, '~', m_nCols * m_nRows);
@@ -93,7 +94,6 @@ GAME_STATE Game::checkGameState()
 
 void Game::update()
 {
-
 	render(checkGameState());
 	input();
 }
@@ -104,39 +104,32 @@ void Game::input()
 	int x(0), y(0);
 	char type(0);
 
-	Borland::GotoXY(8, 2);
-	cout << "MINE GAME";
+	m_input.readEveryFrame();
+	
+	// 마우스 인풋이 들어온 경우 search()
+	Position mousePos = m_input.getMousePosition();
+	search((mousePos.x/2 - 2), (mousePos.y - 8));
 
-	Borland::GotoXY(2, 4);
-	cout << "               " << endl;
-	cout << "               ";
-	if (checkGameState() == GAME_STATE::PLAY)
+	// 키패드 숫자 입력값 확인
+	for (int i = 0; i < 10; i++)
 	{
-
-		Borland::GotoXY(2, 4);
-		cout << "input x : ";
-		Borland::GotoXY(2, 5);
-		cout << "input y : ";
-
-		x = _getch();
-
-		Borland::GotoXY(2, 4);
-		cout << "input x : " << x - 48 << endl;
-		Borland::GotoXY(2, 5);
-		cout << "input y : ";
-		y = _getch();
-
-		search(x - 48, y - 48);
-
-		Borland::GotoXY(27, 6);
-		cout << "                                     ";
-		Borland::GotoXY(27, 6);
-		cout << "Prev x : " << x - 48;
-		Borland::GotoXY(27, 7);
-		cout << "                                     ";
-		Borland::GotoXY(27, 7);
-		cout << "Prev y : " << y - 48;
+		if (m_input.getKeyDown(i + 48))
+		{
+			if (m_keyInputX == -1)
+				m_keyInputX = i;
+			else if (m_keyInputY == -1)
+				m_keyInputY = i;
+		}
 	}
+	// 키보드 인풋이 모두 들어온 경우
+	if (m_keyInputX >= 0 && m_keyInputY >= 0)
+	{
+		search(m_keyInputX, m_keyInputY);
+		m_keyInputX = -1;
+		m_keyInputY = -1;
+	}
+
+
 }
 
 void Game::play()
@@ -197,6 +190,11 @@ void Game::initMap()
 void Game::search(int x, int y)
 {
 	int selectIndex = 10 * y + x;
+
+	Borland::GotoXY(0, 20);
+
+	if(x >= 0 && y >= 0)
+		cout << "input x: " << x << ", input y: " << y << "           ";
 
 	// 지뢰찾기의 크기보다 큰 값이 들어올 경우 무시
 	if (x < 0 || y < 0 || x > m_nCols || y > m_nRows) return;
