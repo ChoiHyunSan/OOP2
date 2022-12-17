@@ -10,7 +10,7 @@ private:
 public:
 	Vector() : x((T)0.f), y((T)0.f) {};
 	Vector(const T& _x, const T& _y) : x(_x),y(_y){}
-
+	
 	template<typename U>
 	Vector(const Vector<U>& other) : Vector(static_cast<T>(other.X()), static_cast<T>(other.Y())) {}
 	~Vector() {};
@@ -37,7 +37,7 @@ public:
 
 	Vector operator*(const Vector& other) const
 	{
-		return Vector(this->x * other.X(), this->y * other.Y());
+		return Vector(static_cast<T>(this->x * other.X()), static_cast<T>(this->y * other.Y()));
 	}
 
 	template<typename U>
@@ -51,6 +51,11 @@ public:
 		return Vector(this->x - other.X(), this->y - other.Y());
 	}
 
+	template<typename U>
+	friend Vector operator*(U scale, const Vector& other)
+	{
+		return other.operator*<U>(scale);
+	}
 
 	T X() const { return x; }
 	T Y() const { return y; }
